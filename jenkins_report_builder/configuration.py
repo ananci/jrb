@@ -2,8 +2,10 @@
 
 import os
 
-from jenkins_report_builder.common import JRB_ROOT_DIR
-from jenkins_report_builder.utils import print_header
+from jenkins_report_builder.common import (
+    JRB_ROOT_DIR, JRB_LOG_DIR, JRB_CONFIG_DIR)
+from jenkins_report_builder.utils import (
+    PPHeader, DirectoryUtilities, PPFooter)
 
 
 class ConfigurationException(Exception):
@@ -16,21 +18,32 @@ class ConfigurationException(Exception):
         :param msg: Mesage desired to output to terminal on exception.
         :type msg: String
         """
-        print_header(header="WARNING", buffer=True)
+        print PPHeader(header="WARNING", buffer=True)
         print "The Jenkins-Report-Builder has not been configured properly."
         print "Please run 'Jenkins-Report-Builder --init'"
         print "{0}{1}".format('\t', msg)
+        print PPFooter(buffer=True)
         Exception.__init__(self, msg, *args, **kwargs)
 
 
 class Initialize(object):
     """Initializatizing the needed files for JRB to run."""
 
+
     # TODO - Make this interactive!
 
     def __init__(self):
         """Initialization method for the Initialize Object."""
-        print_header(header="INITIALIZING JENKINS REPORT VIEWER", buffer=True)
+        print PPHeader(
+            header="INITIALIZING JENKINS REPORT VIEWER",
+            buffer=True)
+
+        # Create the .jrb directory in the user's home directory
+        DirectoryUtilities.safe_create_dir(JRB_ROOT_DIR)
+        DirectoryUtilities.safe_create_dir(JRB_LOG_DIR)
+        DirectoryUtilities.safe_create_dir(JRB_CONFIG_DIR)
+        print PPFooter(buffer=True)
+
 
     @classmethod
     def is_initialized(cls):
