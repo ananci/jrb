@@ -2,7 +2,7 @@
 
 import os
 
-from jenkins_report_builder.common import (
+from jenkins_report_builder.constants import (
     JRB_ROOT_DIR, JRB_LOG_DIR, JRB_CONFIG_DIR, JRB_ENGINE_CONFIG_NAME)
 from jenkins_report_builder.utils.io_utils import (
     DirectoryUtilities, FileUtilities)

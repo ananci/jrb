@@ -3,15 +3,46 @@
 from ConfigParser import ConfigParser
 import os
 
-from jenkins_report_builder.common import JRB_CONFIG_DIR
+from jenkins_report_builder.constants import (JRB_ENGINE_PATH, JRB_CONFIG_DIR)
 from jenkins_report_builder import custom_exceptions
 from jenkins_report_builder.initialization import Initialize
 from jenkins_report_builder.utils.output_utils import (
     PPHeader, PPFooter)
 
 
-class JRBConfig(object):
+class ConfigParseInterface(object):
+    def __init__(self):
+        self.config = ConfigParser()
+        if not os.path.exists(self.config_path):
+            raise custom_exceptions.ConfigurationException(
+                msg="Config File does not exist at {0} as expected".format(
+                    self.config_path))
+        try:
+            self.config.read(self.config_path)
+        except Exception as e:
+            raise custom_exceptions.ConfigurationException(
+                msg=e.message)
+
+    def get(self, item_name, default=None):
+        try:
+            return self.config.get(self.section_name, item_name)
+        except:
+            return default
+
+
+class EngineConfig(ConfigParseInterface):
+    """JRB Engine Configuration Object."""
+    config_path = JRB_ENGINE_PATH
+    section_name = 'engine'
+
+    @property
+    def results_path(self):
+        return self.get('results_path')
+
+
+class JRBConfig(ConfigParseInterface):
     """JRB Configuration object."""
+    section_name = 'jenkins'
 
     def __init__(self, config_name):
         """Initialization method for JRB Configurations."""
@@ -20,16 +51,15 @@ class JRBConfig(object):
 
         self.config_path = os.path.join(
             JRB_CONFIG_DIR, config_name)
+        super(JRBConfig, self).__init__()
 
-        # Check to make sure the file exists
-        check = os.path.isfile(self.config_path)
-        if not check:
-            # Is the application even initialized? It would be really unusual
-            # to get this far, but let's do a safety check.
-            Initialize.is_initialized()
-            raise custom_exceptions.ConfigurationException(
-                msg=('Unable to find a config file at {0}\n').format(
-                    self.config_path))
+    @property
+    def username(self):
+        return self.get('username')
+
+    @property
+    def password(self):
+        return self.get('password')
 
     @classmethod
     def get_configs(cls):

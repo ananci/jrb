@@ -59,7 +59,7 @@ setup(
     author='Anna Eilering',
     author_email='nahkki@gmail.com',
     url='https://github.com/ananci/jrb',
-    install_requires=[],
+    install_requires=['python-jenkins'],
     packages=find_packages(),
     license=get_license(),
     classifiers=[
