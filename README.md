@@ -3,10 +3,11 @@
 
 ## Table of Contents
 
-1. [Motivation](#Motivation)
-2. [Installation and Initialization](#Installation)
-3. [Configuration](#Configuration)
-4. [Basic Usage](#Basic Usage)
+1. [Motivation](##Motivation)
+2. [Installation and Initialization](##Installation)
+3. [Configuration](##Configuration)
+4. [Basic Usage](##Basic Usage)
+
 ---
 
 ## Motivation
