@@ -49,4 +49,5 @@ setup(
         'Topic :: Utilities'],
     entry_points={
         'console_scripts':
-            ['jenkins-report-builder=jenkins_report_builder.command_line:main']})
+            [('jenkins-report-builder=jenkins_report_builder.command_line:'
+              'entry_point')]})
