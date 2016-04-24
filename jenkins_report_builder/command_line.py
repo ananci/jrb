@@ -10,15 +10,15 @@ from jenkins_report_builder.main import main
 def get_args():
     """Get the command line arguments."""
     parser = ArgumentParser(
-            description='Generate a report from a Jenkins View.')
+        description='Generate a report from a Jenkins View.')
 
     subparsers = parser.add_subparsers(help='Commands', dest='command')
 
-    init_parser = subparsers.add_parser(
+    subparsers.add_parser(
         'init',
         help='Initialize Jenkins Report Viewer')
 
-    list_parser = subparsers.add_parser(
+    subparsers.add_parser(
         'list',
         help='Display a list of available configurations.')
 
@@ -48,13 +48,13 @@ def entry_point():
 
     try:
         initialization.Initialize.is_initialized()
-    except initialization.InitializationException as e:
+    except initialization.InitializationException:
         # JRB was not properly initialized.
         sys.exit(1)
 
     try:
         config = JRBConfig(args.config)
-    except ConfigurationException as e:
+    except ConfigurationException:
         # JRB was not properly configured.
         sys.exit(1)
 

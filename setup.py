@@ -1,6 +1,28 @@
 """Copyright 2016 Anna Eilering."""
+# TODO - add testing for this.
 
+import os
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
+import sys
+
+
+# tox integration
+class Tox(TestCommand):
+    """Create the Tox command for testing."""
+
+    def finalize_options(self):
+        """Finalize test options for TestCommand."""
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        """Setting up to run the tests."""
+        # import here, this ensures eggs are loaded
+        import tox
+        errno = tox.cmdline(self.test_args)
+        sys.exit(errno)
 
 
 def get_long_description():
@@ -23,6 +45,10 @@ def get_license():
     """
     # TODO - Set up a license for this
     return "license"
+
+
+# Establish a consistent base directory relative to the setup.py file
+os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 # Normal Setup Stuff
 setup(
@@ -50,4 +76,6 @@ setup(
     entry_points={
         'console_scripts':
             [('jenkins-report-builder=jenkins_report_builder.command_line:'
-              'entry_point')]})
+              'entry_point')]},
+    tests_require=['tox'],
+    cmdclass={'test': Tox})

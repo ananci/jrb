@@ -1,3 +1,5 @@
+"""Copyright 2016 Anna Eilering."""
+
 from contextlib import contextmanager
 from StringIO import StringIO
 import unittest
@@ -8,6 +10,7 @@ from jenkins_report_builder import utils
 
 @contextmanager
 def captured_output():
+    """STDOUT context manager for testing prints to terminal."""
     new_out, new_err = StringIO(), StringIO()
     old_out, old_err = sys.stdout, sys.stderr
     try:
@@ -38,7 +41,7 @@ class PrintHeaderTest(unittest.TestCase):
         self.assertTrue(output[-2] == ' ')
 
     def test_PPHeader_header_list_if_buffer_set(self):
-        """Check that the headers list is as expected."""
+        """Check that the headers list is as expected if buffer is True."""
         h = utils.PPHeader(header='fake', buffer=True).header_list
         self.assertTrue(len(h) == 5)
 
@@ -60,6 +63,6 @@ class PrintHeaderTest(unittest.TestCase):
         self.assertTrue(output[-2] != ' ')
 
     def test_PPHeader_header_list_if_buffer_not_set(self):
-        """Check that the headers list is as expected."""
+        """Check that the headers list is as expected if buffer is False."""
         h = utils.PPHeader(header='fake', buffer=False).header_list
         self.assertTrue(len(h) == 3)

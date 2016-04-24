@@ -14,14 +14,14 @@ class PPHeader(object):
         self.header_list = []
         if buffer:
             self.header_list.append(' ')
-        self.header_list.append('='*self.TERMINAL_WIDTH)
+        self.header_list.append('=' * self.TERMINAL_WIDTH)
         # Let's format this all pretty like
         offset = 0
         if len(header) < self.TERMINAL_WIDTH:
-            offset = (self.TERMINAL_WIDTH/2) - (len(header)/2)
-        spaces = ' '*offset
+            offset = (self.TERMINAL_WIDTH / 2) - (len(header) / 2)
+        spaces = ' ' * offset
         self.header_list.append('{}{}'.format(spaces, header))
-        self.header_list.append('-'*self.TERMINAL_WIDTH)
+        self.header_list.append('-' * self.TERMINAL_WIDTH)
         if buffer:
             self.header_list.append(' ')
 
@@ -40,7 +40,7 @@ class PPFooter(object):
         self.footer_list = []
         if buffer:
             self.footer_list.append(' ')
-        self.footer_list.append('='*self.TERMINAL_WIDTH)
+        self.footer_list.append('=' * self.TERMINAL_WIDTH)
         if buffer:
             self.footer_list.append(' ')
 

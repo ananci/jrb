@@ -1,0 +1,4 @@
+# Packages
+*.eggs/
+*.egg-info/
+*.tox/

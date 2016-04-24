@@ -20,7 +20,7 @@ class InitializationException(Exception):
         """
         print PPHeader(header="WARNING", buffer=True)
         print "The Jenkins-Report-Builder has not been initialized properly."
-        print "Please run 'Jenkins-Report-Builder --init'"
+        print "Please run 'Jenkins-Report-Builder init'"
         print "{0}{1}".format('\t', msg)
         print PPFooter(buffer=True)
         Exception.__init__(self, msg, *args, **kwargs)

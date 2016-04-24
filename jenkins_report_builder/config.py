@@ -51,6 +51,10 @@ class JRBConfig(object):
     @classmethod
     def get_configs(cls):
         """Get a list of available configs."""
+        if not any(x.endswith('.config') for x in os.listdir(JRB_CONFIG_DIR)):
+            raise ConfigurationException(
+                msg=('Unable to find any config files at {0}\n').format(
+                    JRB_CONFIG_DIR))
         print utils.PPHeader(header='AVAILABVLE CONFIGS')
         configs = [os.path.splitext(x)[0] for x in os.listdir(
             JRB_CONFIG_DIR) if x.endswith('.config')]
