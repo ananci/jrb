@@ -20,7 +20,7 @@ def captured_output():
         sys.stdout, sys.stderr = old_out, old_err
 
 
-class PrintHeaderTest(unittest.TestCase):
+class PrintHeaderTests(unittest.TestCase):
     """Tests to confirm print_header function works as expected."""
 
     def test_front_buffer_if_set_true(self):

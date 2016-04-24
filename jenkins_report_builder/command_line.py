@@ -3,7 +3,8 @@ from argparse import ArgumentParser
 import sys
 
 from jenkins_report_builder import initialization
-from jenkins_report_builder.config import ConfigurationException, JRBConfig
+from jenkins_report_builder.configuration.config import (
+    ConfigurationException, JRBConfig)
 from jenkins_report_builder.main import main
 
 
@@ -30,20 +31,23 @@ def get_args():
         metavar='<configuration file path>',
         help='Name of the configuration file to be used.')
 
-    args = parser.parse_args()
-    return args
+    return parser
 
 
 def entry_point():
     """Entry Point to the Jenkins Report Builder Script."""
-    args = get_args()
+    # Get the command line arguments
+    args = get_args().parse_args()
 
     if args.command == 'init':
         initialization.Initialize()
         sys.exit(0)
 
     if args.command == 'list':
-        JRBConfig.get_configs()
+        try:
+            JRBConfig.get_configs()
+        except ConfigurationException:
+            pass
         sys.exit(0)
 
     try:
