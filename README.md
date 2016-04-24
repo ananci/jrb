@@ -1,12 +1,21 @@
 # JRB - Jenkins Report Builder
 ---
 
-## Table of Contents
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-1. [Motivation](##Motivation)
-2. [Installation and Initialization](##Installation)
-3. [Configuration](##Configuration)
-4. [Basic Usage](##Basic Usage)
+- [JRB - Jenkins Report Builder](#jrb-jenkins-report-builder)
+	- [Motivation](#motivation)
+	- [Installation](#installation)
+		- [To install JRB from github:](#to-install-jrb-from-github)
+		- [Initialization](#initialization)
+			- [To Force Automation Reconfiguration](#to-force-automation-reconfiguration)
+	- [Configuration](#configuration)
+		- [JRB Engine Configuration](#jrb-engine-configuration)
+		- [JRB Jenkins Configuration](#jrb-jenkins-configuration)
+	- [Basic Usage](#basic-usage)
+		- [To list available configurations](#to-list-available-configurations)
+
+<!-- /TOC -->
 
 ---
 
