@@ -14,6 +14,7 @@
 		- [JRB Jenkins Configuration](#jrb-jenkins-configuration)
 	- [Basic Usage](#basic-usage)
 		- [To list available configurations](#to-list-available-configurations)
+	- [For Developers](#for-developers)
 
 <!-- /TOC -->
 
@@ -121,6 +122,8 @@ A `sample.config` file is automatically generated and placed in the
 You are required to provide a valid configuration for any Jenkins you wish
 to run against.
 
+---
+
 ## Basic Usage
 
 ### To list available configurations
@@ -137,3 +140,14 @@ to run against.
 	other_teams_jenkins
 ================================================================================
 ```
+
+---
+
+## For Developers
+Development against JRB is intended to be Test Driven. Please include tests
+as you make changes to functionality or update tests as required. To run JRB
+tests against changes:
+
+`python setup.py test`
+
+This will run PEP8 and included unittests in a Python27 environment.
