@@ -5,7 +5,7 @@ from StringIO import StringIO
 import unittest
 import sys
 
-from jenkins_report_builder.utils.output_utils import PPHeader
+from jenkins_report_builder.utils.output_utils import PPHeader, PPFooter
 
 
 @contextmanager
@@ -20,7 +20,7 @@ def captured_output():
         sys.stdout, sys.stderr = old_out, old_err
 
 
-class PrintHeaderTests(unittest.TestCase):
+class PrintHeaderFooterTests(unittest.TestCase):
     """Tests to confirm print_header function works as expected."""
 
     def test_front_buffer_if_set_true(self):
@@ -65,4 +65,14 @@ class PrintHeaderTests(unittest.TestCase):
     def test_PPHeader_header_list_if_buffer_not_set(self):
         """Check that the headers list is as expected if buffer is False."""
         h = PPHeader(header='fake', buffer=False).header_list
+        self.assertTrue(len(h) == 3)
+
+    def test_PPFooter_footer_list_if_buffer_not_set(self):
+        """Check that the footers list is as expected if buffer is False."""
+        h = PPFooter(buffer=False).footer_list
+        self.assertTrue(len(h) == 1)
+
+    def test_PPFooter_footer_list_if_buffer_set(self):
+        """Check that the footers list is as expected if buffer is True."""
+        h = PPFooter(buffer=True).footer_list
         self.assertTrue(len(h) == 3)
