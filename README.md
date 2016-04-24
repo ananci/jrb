@@ -28,7 +28,7 @@ Jenkins job results without being tied to the target Jenkins. This python
 application can be run on the target Jenkins, any Jenkins or, in fact,
 anywhere that python code can be run.
 
-This application was bourn of a need to meet compliance(SOX in particular)
+This application was born of a need to meet compliance(SOX in particular)
 requirements around Jenkins jobs. It generates a report in the format chosen(
 pdf, html, text) and outputs it to a configured directory. This report includes
 a chart representing all the names of all jobs selected by the user, their
@@ -57,9 +57,9 @@ To run JRB you must first initialize and configure the application.
 
 Initialize jrb:
 
-`(jrb) anna@anna-desktop:~/work/git-repos/jrb$ jenkins-report-builder init`
+`$ jenkins-report-builder init`
 
-You will recieve similar output:
+You will receive similar output:
 
 ```================================================================================
                        INITIALIZING JENKINS REPORT VIEWER
@@ -107,11 +107,11 @@ application. This configuration is generated on JRB Initialization and
 provides advanced users a mechanism to customize their JRB setup.
 
 ### JRB Jenkins Configuration
-The Second is at least one jenkins configuration file. These files exist in
+The Second is at least one Jenkins configuration file. These files exist in
 the `.jrb/config` directory and each represents a common Jenkins you run JRB
 reports against. This configuration file includes:
-* Base URL for the targetted Jenkins for reporting purposes.
-* Username and password for the target Jenkins (leave blank if not required.)
+* Base URL for the targeted Jenkins for reporting purposes.
+* User name and password for the target Jenkins (leave blank if not required.)
 * Default Generator - a default user to put on reports generated.
 * A label to represent the target Jenkins (A human readable tag.)
 
