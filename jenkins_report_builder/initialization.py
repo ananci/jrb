@@ -3,27 +3,12 @@
 import os
 
 from jenkins_report_builder.common import (
-    JRB_ROOT_DIR, JRB_LOG_DIR, JRB_CONFIG_DIR)
-from jenkins_report_builder.utils import (
-    PPHeader, DirectoryUtilities, PPFooter)
-
-
-class InitializationException(Exception):
-    """Custom Exception for reporting JRB configuration issues."""
-
-    def __init__(self, msg, *args, **kwargs):
-        """
-        Initialization method for Configuration Exceptions.
-
-        :param msg: Mesage desired to output to terminal on exception.
-        :type msg: String
-        """
-        print PPHeader(header="WARNING", buffer=True)
-        print "The Jenkins-Report-Builder has not been initialized properly."
-        print "Please run 'Jenkins-Report-Builder init'"
-        print "{0}{1}".format('\t', msg)
-        print PPFooter(buffer=True)
-        Exception.__init__(self, msg, *args, **kwargs)
+    JRB_ROOT_DIR, JRB_LOG_DIR, JRB_CONFIG_DIR, JRB_ENGINE_CONFIG_NAME)
+from jenkins_report_builder.utils.io_utils import (
+    DirectoryUtilities, FileUtilities)
+from jenkins_report_builder.utils.output_utils import (
+    PPHeader, PPFooter)
+from jenkins_report_builder import custom_exceptions
 
 
 class Initialize(object):
@@ -40,6 +25,33 @@ class Initialize(object):
         DirectoryUtilities.safe_create_dir(JRB_ROOT_DIR)
         DirectoryUtilities.safe_create_dir(JRB_LOG_DIR)
         DirectoryUtilities.safe_create_dir(JRB_CONFIG_DIR)
+
+        with open(os.path.join(
+                'jenkins_report_builder',
+                'configuration',
+                'default_engine_config.config'), 'r') as dec:
+            engine_config_data = dec.read().format(
+                default_results_path=JRB_ROOT_DIR)
+
+        # Create the JRB Engine configuration file
+        FileUtilities.safe_config_create(
+            JRB_ROOT_DIR,
+            JRB_ENGINE_CONFIG_NAME,
+            engine_config_data)
+
+        with open(os.path.join(
+                'jenkins_report_builder',
+                'configuration',
+                'sample_config.config'), 'r') as dec:
+            sample_config_data = dec.read().format(
+                default_results_path=JRB_ROOT_DIR)
+
+        # Create the JRB Engine configuration file
+        FileUtilities.safe_config_create(
+            JRB_CONFIG_DIR,
+            'sample.config',
+            sample_config_data)
+
         print PPFooter(buffer=True)
 
     @classmethod
@@ -47,11 +59,11 @@ class Initialize(object):
         """Check to see if JRB has been properly initialized."""
         # check that the jrb directory is present
         if not os.path.isdir(JRB_ROOT_DIR):
-            raise InitializationException(
+            raise custom_exceptions.InitializationException(
                 msg='{0} directory is not present.'.format(JRB_ROOT_DIR))
         if not os.path.isdir(JRB_LOG_DIR):
-            raise InitializationException(
+            raise custom_exceptions.InitializationException(
                 msg='{0} directory is not present.'.format(JRB_LOG_DIR))
         if not os.path.isdir(JRB_CONFIG_DIR):
-            raise InitializationException(
+            raise custom_exceptions.InitializationException(
                 msg='{0} directory is not present.'.format(JRB_CONFIG_DIR))

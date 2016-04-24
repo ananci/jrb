@@ -1,0 +1,3 @@
+include README.md LICENSE
+recursive-include docs *.txt
+recursive-include jenkins_report_builder *.config

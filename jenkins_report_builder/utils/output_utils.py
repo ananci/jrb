@@ -1,5 +1,4 @@
 """Copyright 2016 Anna Eilering."""
-import os
 
 
 # TODO - seperate buffers
@@ -47,16 +46,3 @@ class PPFooter(object):
     def __str__(self):
         """String method for PPFooter."""
         return '\n'.join(self.footer_list)
-
-
-class DirectoryUtilities(object):
-    """Common Directory Utilities."""
-
-    @classmethod
-    def safe_create_dir(cls, directory_path):
-        """Convenience method for safely creating a directory."""
-        if not os.path.exists(directory_path):
-            print '\tCreating path at {}'.format(directory_path)
-            os.makedirs(directory_path)
-        else:
-            print '\tPath already exists at {}'.format(directory_path)

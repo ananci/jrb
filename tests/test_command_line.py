@@ -9,6 +9,7 @@ class CommandLineTests(unittest.TestCase):
     """Tests to confirm command_line methods work as expected."""
 
     def setUp(self):
+        """Set up method for command line tests."""
         self.parser = command_line.get_args()
 
     def test_arg_parser_init(self):

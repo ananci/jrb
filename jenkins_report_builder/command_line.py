@@ -2,9 +2,9 @@
 from argparse import ArgumentParser
 import sys
 
+from jenkins_report_builder import custom_exceptions
 from jenkins_report_builder import initialization
-from jenkins_report_builder.configuration.config import (
-    ConfigurationException, JRBConfig)
+from jenkins_report_builder.configuration.config import JRBConfig
 from jenkins_report_builder.main import main
 
 
@@ -40,25 +40,29 @@ def entry_point():
     args = get_args().parse_args()
 
     if args.command == 'init':
-        initialization.Initialize()
+        try:
+            initialization.Initialize()
+        except custom_exceptions.SafeConfigurationException:
+            pass
         sys.exit(0)
+
+    # Anything beyond this point would error if initialization has not occured.
+    try:
+        initialization.Initialize.is_initialized()
+    except custom_exceptions.InitializationException:
+        # JRB was not properly initialized.
+        sys.exit(1)
 
     if args.command == 'list':
         try:
             JRBConfig.get_configs()
-        except ConfigurationException:
+        except custom_exceptions.ConfigurationException:
             pass
         sys.exit(0)
 
     try:
-        initialization.Initialize.is_initialized()
-    except initialization.InitializationException:
-        # JRB was not properly initialized.
-        sys.exit(1)
-
-    try:
         config = JRBConfig(args.config)
-    except ConfigurationException:
+    except custom_exceptions.ConfigurationException:
         # JRB was not properly configured.
         sys.exit(1)
 

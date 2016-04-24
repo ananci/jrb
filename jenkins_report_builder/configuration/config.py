@@ -4,27 +4,10 @@ from ConfigParser import ConfigParser
 import os
 
 from jenkins_report_builder.common import JRB_CONFIG_DIR
+from jenkins_report_builder import custom_exceptions
 from jenkins_report_builder.initialization import Initialize
-from jenkins_report_builder import utils
-
-
-class ConfigurationException(Exception):
-    """Custom Exception for reporting JRB configuration issues."""
-
-    def __init__(self, msg, *args, **kwargs):
-        """
-        Initialization method for Configuration Exceptions.
-
-        :param msg: Mesage desired to output to terminal on exception.
-        :type msg: String
-        """
-        print utils.PPHeader(header="WARNING", buffer=True)
-        print "The Jenkins-Report-Builder has not been configured properly."
-        print ("Please review the README to create appropriate configuration "
-               "files.")
-        print "{0}{1}".format('\t', msg)
-        print utils.PPFooter(buffer=True)
-        Exception.__init__(self, msg, *args, **kwargs)
+from jenkins_report_builder.utils.output_utils import (
+    PPHeader, PPFooter)
 
 
 class JRBConfig(object):
@@ -44,7 +27,7 @@ class JRBConfig(object):
             # Is the application even initialized? It would be really unusual
             # to get this far, but let's do a safety check.
             Initialize.is_initialized()
-            raise ConfigurationException(
+            raise custom_exceptions.ConfigurationException(
                 msg=('Unable to find a config file at {0}\n').format(
                     self.config_path))
 
@@ -52,13 +35,13 @@ class JRBConfig(object):
     def get_configs(cls):
         """Get a list of available configs."""
         if not any(x.endswith('.config') for x in os.listdir(JRB_CONFIG_DIR)):
-            raise ConfigurationException(
+            raise custom_exceptions.ConfigurationException(
                 msg=('Unable to find any config files at {0}\n').format(
                     JRB_CONFIG_DIR))
-        print utils.PPHeader(header='AVAILABVLE CONFIGS')
+        print PPHeader(header='AVAILABVLE CONFIGS')
         configs = [os.path.splitext(x)[0] for x in os.listdir(
             JRB_CONFIG_DIR) if x.endswith('.config')]
         sorted(configs)
         for config in configs:
             print '\t{}'.format(config)
-        print utils.PPFooter()
+        print PPFooter()

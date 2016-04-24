@@ -5,7 +5,7 @@ from StringIO import StringIO
 import unittest
 import sys
 
-from jenkins_report_builder import utils
+from jenkins_report_builder.utils.output_utils import PPHeader
 
 
 @contextmanager
@@ -26,14 +26,14 @@ class PrintHeaderTests(unittest.TestCase):
     def test_front_buffer_if_set_true(self):
         """Check if the buffer is set to true there is newline at front."""
         with captured_output() as (out, err):
-            print utils.PPHeader(header='fake', buffer=True)
+            print PPHeader(header='fake', buffer=True)
         output = out.getvalue().split('\n')
         self.assertTrue(output[0] == ' ')
 
     def test_rear_buffer_if_set_true(self):
         """Check if the buffer is set to true there is newline at rear."""
         with captured_output() as (out, err):
-            print utils.PPHeader(header='fake', buffer=True)
+            print PPHeader(header='fake', buffer=True)
         output = out.getvalue().split('\n')
 
         # Checking pos -2 because capturing from stdout results in an extra
@@ -42,20 +42,20 @@ class PrintHeaderTests(unittest.TestCase):
 
     def test_PPHeader_header_list_if_buffer_set(self):
         """Check that the headers list is as expected if buffer is True."""
-        h = utils.PPHeader(header='fake', buffer=True).header_list
+        h = PPHeader(header='fake', buffer=True).header_list
         self.assertTrue(len(h) == 5)
 
     def test_front_buffer_if_set_false(self):
         """Check if the buffer is set to false there is no newline at front."""
         with captured_output() as (out, err):
-            print utils.PPHeader(header='fake', buffer=False)
+            print PPHeader(header='fake', buffer=False)
         output = out.getvalue().split('\n')
         self.assertTrue(output[0] != ' ')
 
     def test_rear_buffer_if_set_false(self):
         """Check if the buffer is set to false there is no newline at rear."""
         with captured_output() as (out, err):
-            print utils.PPHeader(header='fake', buffer=False)
+            print PPHeader(header='fake', buffer=False)
         output = out.getvalue().split('\n')
 
         # Checking pos -2 because capturing from stdout results in an extra
@@ -64,5 +64,5 @@ class PrintHeaderTests(unittest.TestCase):
 
     def test_PPHeader_header_list_if_buffer_not_set(self):
         """Check that the headers list is as expected if buffer is False."""
-        h = utils.PPHeader(header='fake', buffer=False).header_list
+        h = PPHeader(header='fake', buffer=False).header_list
         self.assertTrue(len(h) == 3)
