@@ -2,7 +2,8 @@
 from argparse import ArgumentParser
 import sys
 
-from jenkins_report_builder import configuration
+from jenkins_report_builder import initialization
+from jenkins_report_builder.config import JRBConfig
 
 
 def get_args():
@@ -13,7 +14,13 @@ def get_args():
         '--init',
         action='store_true',
         default=False,
-        help="Initialize Jenkins Report Viewer")
+        help='Initialize Jenkins Report Viewer')
+
+    parser.add_argument(
+        '--list',
+        action='store_true',
+        default=False,
+        help='Display a list of available configurations.')
 
     args = parser.parse_args()
     return args
@@ -24,12 +31,16 @@ def main():
     args = get_args()
 
     if args.init:
-        configuration.Initialize()
+        initialization.Initialize()
+        sys.exit(0)
+
+    if args.list:
+        JRBConfig.get_configs()
         sys.exit(0)
 
     try:
-        configuration.Initialize.is_initialized()
-    except configuration.ConfigurationException as e:
+        initialization.Initialize.is_initialized()
+    except initialization.InitializationException as e:
         # JRB was not properly initialized.
         sys.exit(1)
 
