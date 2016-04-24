@@ -31,7 +31,7 @@ class Initialize(object):
                 'configuration',
                 'default_engine_config.config'), 'r') as dec:
             engine_config_data = dec.read().format(
-                default_results_path=JRB_ROOT_DIR)
+                default_results_path=os.path.join(JRB_ROOT_DIR, 'results'))
 
         # Create the JRB Engine configuration file
         FileUtilities.safe_config_create(
