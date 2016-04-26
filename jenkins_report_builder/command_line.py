@@ -13,6 +13,9 @@ def get_args():
     parser = ArgumentParser(
         description='Generate a report from a Jenkins View.')
 
+    parser.add_argument(
+        '-o', '--output_format', help="Override the default output format")
+
     subparsers = parser.add_subparsers(help='Commands', dest='command')
 
     subparsers.add_parser(

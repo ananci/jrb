@@ -12,3 +12,5 @@ class ChartResult(object):
         for key, value in locals().items():
             if key != 'self':
                 setattr(self, key, value)
+
+    def report(self, report_output=None):
