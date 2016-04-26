@@ -5,7 +5,7 @@ import sys
 from jenkins_report_builder import custom_exceptions
 from jenkins_report_builder import initialization
 from jenkins_report_builder.configuration.config import JRBConfig
-from jenkins_report_builder.main import ViewReport
+from jenkins_report_builder.view import View
 
 
 def get_args():

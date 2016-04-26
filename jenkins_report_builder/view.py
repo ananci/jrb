@@ -3,19 +3,7 @@ import jenkins
 
 import pprint
 
-class ChartResults(object):
-
-    def __init__(object):
-        self.results = []
-
-class ChartResult(object):
-    def __init__(self, job_name, result, timestamp, trigger):
-        for key, value in locals().items():
-            if key != 'self':
-                setattr(self, key, value)
-
-
-class ViewReport(object):
+class View(object):
 
     def __init__(self, config, hr_view_url):
         """Generate the neccesary report from a View."""
@@ -31,6 +19,7 @@ class ViewReport(object):
             username=username,
             password=password)
 
+    def get_most_recent_jobs(self):
         pp = pprint.PrettyPrinter(indent=4)
 
         # get the jobs
