@@ -5,7 +5,7 @@ import sys
 from jenkins_report_builder import custom_exceptions
 from jenkins_report_builder import initialization
 from jenkins_report_builder.configuration.config import JRBConfig
-from jenkins_report_builder.view import View
+from jenkins_report_builder.jenkins.view import View
 
 
 def get_args():
@@ -71,7 +71,8 @@ def entry_point():
         sys.exit(1)
 
     # TODO - add options other than view reporting
-    ViewReport(config=config, hr_view_url=args.url)
+    View(config=config, hr_view_url=args.url)
+
 
 
 if __name__ == "__main__":

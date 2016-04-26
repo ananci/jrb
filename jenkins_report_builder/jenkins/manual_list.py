@@ -3,30 +3,31 @@ import jenkins
 
 import pprint
 
-class View(object):
+class ManualList(object):
 
-    def __init__(self, config, hr_view_url):
-        """Generate the neccesary report from a View."""
+    def __init__(self, config, file_path):
+        """Generate the necessary report from a View."""
         # Most of this should be moved out of __init__
         self.config = config
-        self.hr_view_url = hr_view_url
 
+        self.url = config.url
         username = config.username
         password = config.password
 
-        server = jenkins.Jenkins(
+        with open(file_path, 'r') as fp:
+            # TODO - make sure this parses correctly.
+            self.jobs = fp.readlines()
+
+        self.server = jenkins.Jenkins(
             self.hr_view_url,
             username=username,
             password=password)
 
-    def get_most_recent_jobs(self):
+    def get_most_recent_run(self):
         pp = pprint.PrettyPrinter(indent=4)
 
-        # get the jobs
-        self.jobs = server.get_jobs()
-        for job in self.jobs:
-            job_name = job.get('name')
-            job_info = server.get_job_info(job_name)
+        for job_name in self.jobs:
+            job_info = self.server.get_job_info(job_name)
 
             # pp.pprint(job_info)
             # from this we can get the last build number
@@ -36,8 +37,8 @@ class View(object):
                 # TODO - still report what we found.
                 continue
 
-            build_info = server.get_build_info(job_name, last_build_number)
-            console_output = server.get_build_console_output(
+            build_info = self.server.get_build_info(job_name, last_build_number)
+            console_output = self.server.get_build_console_output(
                 job_name, last_build_number)
             pp.pprint(build_info)
             pp.pprint(console_output)
