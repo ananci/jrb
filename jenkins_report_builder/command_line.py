@@ -13,6 +13,7 @@ def get_args():
     parser = ArgumentParser(
         description='Generate a report from a Jenkins View.')
 
+    # TODO - add a mechanism to tell users what output formats are available
     parser.add_argument(
         '-o',
         '--output_format',

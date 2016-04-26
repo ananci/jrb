@@ -4,7 +4,11 @@
 class ChartResults(object):
 
     def __init__(self):
-        self.results = []
+        self.results = {}
+
+    def add_result(self, job_name, result, timestamp, trigger):
+        self.results[job_name] = ChartResult(
+            job_name, result, timestamp, trigger)
 
 
 class ChartResult(object):
@@ -14,3 +18,4 @@ class ChartResult(object):
                 setattr(self, key, value)
 
     def report(self, report_output=None):
+        pass
