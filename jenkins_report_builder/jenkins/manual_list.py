@@ -3,6 +3,7 @@ import jenkins
 
 import pprint
 
+
 class ManualList(object):
 
     def __init__(self, config, file_path):
@@ -24,6 +25,7 @@ class ManualList(object):
             password=password)
 
     def get_most_recent_run(self):
+        """Get the jobs representing the most recent run."""
         pp = pprint.PrettyPrinter(indent=4)
 
         for job_name in self.jobs:
@@ -37,7 +39,9 @@ class ManualList(object):
                 # TODO - still report what we found.
                 continue
 
-            build_info = self.server.get_build_info(job_name, last_build_number)
+            build_info = self.server.get_build_info(
+                job_name,
+                last_build_number)
             console_output = self.server.get_build_console_output(
                 job_name, last_build_number)
             pp.pprint(build_info)

@@ -24,8 +24,8 @@ def get_args():
         help='Display a list of available configurations.')
 
     run_parser = subparsers.add_parser(
-        'run',
-        help='Run the JRB against a targeted Jenkins.')
+        'view-report',
+        help='Run the JRB against a targeted Jenkins View.')
     run_parser.add_argument(
         'config',
         metavar='<configuration file path>',
@@ -70,9 +70,16 @@ def entry_point():
         # JRB was not properly configured.
         sys.exit(1)
 
-    # TODO - add options other than view reporting
-    View(config=config, hr_view_url=args.url)
-
+    # TODO - make this more consistent
+    if args.command == 'view-report':
+        # TODO - add options other than view reporting
+        View(config=config, hr_view_url=args.url)
+    if args.command == 'manual-list-report':
+        pass
+    if args.command == 'dsl-buildflow-report':
+        pass
+    if args.command == 'chained-builds':
+        pass
 
 
 if __name__ == "__main__":

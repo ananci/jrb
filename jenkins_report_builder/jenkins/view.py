@@ -3,6 +3,7 @@ import jenkins
 
 import pprint
 
+
 class View(object):
 
     def __init__(self, config, hr_view_url):
@@ -20,6 +21,7 @@ class View(object):
             password=password)
 
     def get_most_recent_run(self):
+        """Get the jobs representing the most recent run."""
         pp = pprint.PrettyPrinter(indent=4)
 
         # get the jobs
@@ -36,7 +38,9 @@ class View(object):
                 # TODO - still report what we found.
                 continue
 
-            build_info = self.server.get_build_info(job_name, last_build_number)
+            build_info = self.server.get_build_info(
+                job_name,
+                last_build_number)
             console_output = self.server.get_build_console_output(
                 job_name, last_build_number)
             pp.pprint(build_info)
