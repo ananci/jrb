@@ -79,14 +79,17 @@ def entry_point():
     # TODO - make this more consistent
     if args.command == 'view-report':
         # TODO - add options other than view reporting
-        View(config=config, hr_view_url=args.url)
-    if args.command == 'manual-list-report':
+        report = View(config=config, hr_view_url=args.url)
+    elif args.command == 'manual-list-report':
         pass
-    if args.command == 'dsl-buildflow-report':
+    elif args.command == 'dsl-buildflow-report':
         pass
-    if args.command == 'chained-builds':
+    elif args.command == 'chained-builds':
         pass
-
+    else:
+        print "No valid command recieved."
+        sys.exit(0)
+    report.get_most_recent_run()
 
 if __name__ == "__main__":
     """Alternate entry point to the Jenkins Report Builder Script."""
