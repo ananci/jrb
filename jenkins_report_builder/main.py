@@ -3,16 +3,32 @@ import jenkins
 
 import pprint
 
-class ChartResults(object):
 
-    def __init__(object):
+class Results(object):
+
+    def __init__(self):
         self.results = []
 
-class ChartResult(object):
-    def __init__(self, job_name, result, timestamp, trigger):
-        for key, value in locals().items():
-            if key != 'self':
-                setattr(self, key, value)
+    def add_result(self, result):
+        self.results.append(result)
+
+    def __repr__(self):
+        r_list = [str(r) for r in self.results]
+        return '\n'.join(r_list)
+
+
+class Result(object):
+    def __init__(self, build_info, console_output):
+        # Pull out the data we want
+        self.display_name = build_info.get('fullDisplayName', 'UNKNOWN')
+        self.timestamp = build_info.get('timestamp', 'UNKNOWN')
+        self.result = build_info.get('result', 'UNKNOWN')
+        self.url = build_info.get('url', 'UNKNOWN')
+        self.console_output = console_output
+
+    def __repr__(self):
+        return '{}: {}: {}'.format(
+            self.display_name, self.result, self.timestamp)
 
 
 class ViewReport(object):
@@ -33,6 +49,8 @@ class ViewReport(object):
 
         pp = pprint.PrettyPrinter(indent=4)
 
+        results = Results()
+
         # get the jobs
         self.jobs = server.get_jobs()
         for job in self.jobs:
@@ -50,5 +68,7 @@ class ViewReport(object):
             build_info = server.get_build_info(job_name, last_build_number)
             console_output = server.get_build_console_output(
                 job_name, last_build_number)
-            pp.pprint(build_info)
-            pp.pprint(console_output)
+            results.add_result(
+                Result(build_info=build_info, console_output=console_output))
+
+        print results
