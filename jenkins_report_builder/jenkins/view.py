@@ -1,34 +1,50 @@
 """Copyright 2016 Anna Eilering."""
 import jenkins
+from collections import OrderedDict
+from prettytable import PrettyTable
+import datetime
 
 import pprint
 
 
 class Results(object):
 
+    # Order matters in the heading
+    headers = OrderedDict()
+    headers['display_name'] = 'Display Name'
+    headers['url'] = 'URL'
+    headers['trigger'] = 'Trigger'
+    headers['timestamp'] = 'Time Stamp'
+    headers['result'] = 'Result'
+
     def __init__(self):
         self.results = []
+        self.p_table = PrettyTable(self.headers.values())
 
     def add_result(self, result):
         self.results.append(result)
+        table_order_list = []
+        for k in self.headers.keys():
+            table_order_list.append(getattr(result, k, 'FAILURE'))
+        self.p_table.add_row(table_order_list)
 
     def __repr__(self):
-        r_list = [str(r) for r in self.results]
-        return '\n'.join(r_list)
+        return str(self.p_table)
 
 
 class Result(object):
     def __init__(self, build_info, console_output):
         # Pull out the data we want
         self.display_name = build_info.get('fullDisplayName', 'UNKNOWN')
-        self.timestamp = build_info.get('timestamp', 'UNKNOWN')
+        self.timestamp = datetime.datetime.fromtimestamp(
+            build_info.get('timestamp', '0') / 1000).strftime(
+            '%Y-%m-%d %H:%M:%S CST')
         self.result = build_info.get('result', 'UNKNOWN')
         self.url = build_info.get('url', 'UNKNOWN')
+        self.trigger = build_info.get(
+            'actions', [{}])[0].get(
+            'causes', [{}])[0].get('shortDescription', 'UNKOWN')
         self.console_output = console_output
-
-    def __repr__(self):
-        return '{}: {}: {}'.format(
-            self.display_name, self.result, self.timestamp)
 
 
 class View(object):
