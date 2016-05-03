@@ -31,10 +31,10 @@ class Result(object):
             self.display_name, self.result, self.timestamp)
 
 
-class ViewReport(object):
+class View(object):
 
     def __init__(self, config, hr_view_url):
-        """Generate the neccesary report from a View."""
+        """Generate the necessary report from a View."""
         # Most of this should be moved out of __init__
         self.config = config
         self.hr_view_url = hr_view_url
@@ -42,20 +42,22 @@ class ViewReport(object):
         username = config.username
         password = config.password
 
-        server = jenkins.Jenkins(
+        self.server = jenkins.Jenkins(
             self.hr_view_url,
             username=username,
             password=password)
 
+    def get_most_recent_run(self):
+        """Get the jobs representing the most recent run."""
         pp = pprint.PrettyPrinter(indent=4)
 
         results = Results()
 
         # get the jobs
-        self.jobs = server.get_jobs()
+        self.jobs = self.server.get_jobs()
         for job in self.jobs:
             job_name = job.get('name')
-            job_info = server.get_job_info(job_name)
+            job_info = self.server.get_job_info(job_name)
 
             # pp.pprint(job_info)
             # from this we can get the last build number
@@ -65,8 +67,10 @@ class ViewReport(object):
                 # TODO - still report what we found.
                 continue
 
-            build_info = server.get_build_info(job_name, last_build_number)
-            console_output = server.get_build_console_output(
+            build_info = self.server.get_build_info(
+                job_name,
+                last_build_number)
+            console_output = self.server.get_build_console_output(
                 job_name, last_build_number)
             results.add_result(
                 Result(build_info=build_info, console_output=console_output))

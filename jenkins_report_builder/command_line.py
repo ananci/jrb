@@ -5,13 +5,19 @@ import sys
 from jenkins_report_builder import custom_exceptions
 from jenkins_report_builder import initialization
 from jenkins_report_builder.configuration.config import JRBConfig
-from jenkins_report_builder.main import ViewReport
+from jenkins_report_builder.jenkins.view import View
 
 
 def get_args():
     """Get the command line arguments."""
     parser = ArgumentParser(
         description='Generate a report from a Jenkins View.')
+
+    # TODO - add a mechanism to tell users what output formats are available
+    parser.add_argument(
+        '-o',
+        '--output_format',
+        help="Override the default output format")
 
     subparsers = parser.add_subparsers(help='Commands', dest='command')
 
@@ -24,8 +30,8 @@ def get_args():
         help='Display a list of available configurations.')
 
     run_parser = subparsers.add_parser(
-        'run',
-        help='Run the JRB against a targeted Jenkins.')
+        'view-report',
+        help='Run the JRB against a targeted Jenkins View.')
     run_parser.add_argument(
         'config',
         metavar='<configuration file path>',
@@ -70,8 +76,16 @@ def entry_point():
         # JRB was not properly configured.
         sys.exit(1)
 
-    # TODO - add options other than view reporting
-    ViewReport(config=config, hr_view_url=args.url)
+    # TODO - make this more consistent
+    if args.command == 'view-report':
+        # TODO - add options other than view reporting
+        View(config=config, hr_view_url=args.url)
+    if args.command == 'manual-list-report':
+        pass
+    if args.command == 'dsl-buildflow-report':
+        pass
+    if args.command == 'chained-builds':
+        pass
 
 
 if __name__ == "__main__":

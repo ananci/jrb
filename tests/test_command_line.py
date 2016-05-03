@@ -25,4 +25,4 @@ class CommandLineTests(unittest.TestCase):
     def test_arg_parser_run_no_req_args(self):
         """Test that passing in run without required commands fails."""
         with self.assertRaises(SystemExit):
-            self.parser.parse_args(['run'])
+            self.parser.parse_args(['view-report'])
