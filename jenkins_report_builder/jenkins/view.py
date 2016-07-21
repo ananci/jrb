@@ -1,50 +1,9 @@
 """Copyright 2016 Anna Eilering."""
 import jenkins
-from collections import OrderedDict
-from prettytable import PrettyTable
-import datetime
+
+from jenkins_report_builder.jenkins.results import Result, Results
 
 import pprint
-
-
-class Results(object):
-
-    # Order matters in the heading
-    headers = OrderedDict()
-    headers['display_name'] = 'Display Name'
-    headers['url'] = 'URL'
-    headers['trigger'] = 'Trigger'
-    headers['timestamp'] = 'Time Stamp'
-    headers['result'] = 'Result'
-
-    def __init__(self):
-        self.results = []
-        self.p_table = PrettyTable(self.headers.values())
-
-    def add_result(self, result):
-        self.results.append(result)
-        table_order_list = []
-        for k in self.headers.keys():
-            table_order_list.append(getattr(result, k, 'FAILURE'))
-        self.p_table.add_row(table_order_list)
-
-    def __repr__(self):
-        return str(self.p_table)
-
-
-class Result(object):
-    def __init__(self, build_info, console_output):
-        # Pull out the data we want
-        self.display_name = build_info.get('fullDisplayName', 'UNKNOWN')
-        self.timestamp = datetime.datetime.fromtimestamp(
-            build_info.get('timestamp', '0') / 1000).strftime(
-            '%Y-%m-%d %H:%M:%S CST')
-        self.result = build_info.get('result', 'UNKNOWN')
-        self.url = build_info.get('url', 'UNKNOWN')
-        self.trigger = build_info.get(
-            'actions', [{}])[0].get(
-            'causes', [{}])[0].get('shortDescription', 'UNKOWN')
-        self.console_output = console_output
 
 
 class View(object):
@@ -54,6 +13,14 @@ class View(object):
         # Most of this should be moved out of __init__
         self.config = config
         self.hr_view_url = hr_view_url
+
+        # Because of how the Python Jenkins library works we must
+        # monkey patch if using a self signed cert or otherwise unverified
+        # cert
+        if self.config.insecure:
+            import ssl
+
+            ssl._create_default_https_context = ssl._create_unverified_context
 
         username = config.username
         password = config.password
@@ -73,22 +40,32 @@ class View(object):
         self.jobs = self.server.get_jobs()
         for job in self.jobs:
             job_name = job.get('name')
-            job_info = self.server.get_job_info(job_name)
+            job_info = self.server.get_job_info(job_name) or {}
 
             # pp.pprint(job_info)
             # from this we can get the last build number
-            last_build_number = job_info.get('lastBuild', {}).get(
+            last_build = job_info.get('lastBuild') or {}
+            last_build_number = last_build.get(
                 'number', None)
+
+            # This job was likely never run or there is no available
+            # data for it on the Jenkins. Still report that there was a job.
             if not last_build_number:
-                # TODO - still report what we found.
+                results.add_result(
+                    Result(
+                        job=job))
                 continue
 
             build_info = self.server.get_build_info(
                 job_name,
                 last_build_number)
+            # pp.pprint(build_info)
             console_output = self.server.get_build_console_output(
                 job_name, last_build_number)
             results.add_result(
-                Result(build_info=build_info, console_output=console_output))
+                Result(
+                    job=job,
+                    build_info=build_info,
+                    console_output=console_output))
 
-        print results
+        return results

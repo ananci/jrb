@@ -14,10 +14,10 @@ def get_args():
         description='Generate a report from a Jenkins View.')
 
     # TODO - add a mechanism to tell users what output formats are available
-    parser.add_argument(
-        '-o',
-        '--output_format',
-        help="Override the default output format")
+    # parser.add_argument(
+    #    '-o',
+    #    '--output_format',
+    #    help="Override the default output format")
 
     subparsers = parser.add_subparsers(help='Commands', dest='command')
 
@@ -71,7 +71,6 @@ def entry_point():
 
     try:
         config = JRBConfig(args.config)
-        print config
     except custom_exceptions.ConfigurationException:
         # JRB was not properly configured.
         sys.exit(1)
@@ -79,7 +78,7 @@ def entry_point():
     # TODO - make this more consistent
     if args.command == 'view-report':
         # TODO - add options other than view reporting
-        report = View(config=config, hr_view_url=args.url)
+        results = View(config=config, hr_view_url=args.url).get_most_recent_run()
     elif args.command == 'manual-list-report':
         pass
     elif args.command == 'dsl-buildflow-report':
@@ -89,7 +88,7 @@ def entry_point():
     else:
         print "No valid command recieved."
         sys.exit(0)
-    report.get_most_recent_run()
+    print results
 
 if __name__ == "__main__":
     """Alternate entry point to the Jenkins Report Builder Script."""

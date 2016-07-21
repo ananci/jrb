@@ -34,4 +34,5 @@ class FileUtilities(object):
         else:
             raise custom_exceptions.SafeConfigurationException(
                 msg=('Configuration already exists at {0} \n'
-                     '\t Please manually update the config.'))
+                     '\t Please manually update the config.'.format(
+                        config_path)))

@@ -55,11 +55,30 @@ class JRBConfig(ConfigParseInterface):
 
     @property
     def username(self):
-        return self.get('username')
+        return self.get('username', None)
 
     @property
     def password(self):
-        return self.get('password')
+        return self.get('password', None)
+
+    @property
+    def url(self):
+        return self.get('base_url', None)
+
+    @property
+    def default_generator(self):
+        return self.get('default_generator', 'Jenkins Report Viewer User')
+
+    @property
+    def jenkins_label(self):
+        return self.get('jenkins_label', 'Jenkins')
+
+    @property
+    def insecure(self):
+        insecure = self.get('insecure', 'False')
+        if insecure.lower() == 'True'.lower():
+            insecure = True
+        return insecure
 
     @classmethod
     def get_configs(cls):
